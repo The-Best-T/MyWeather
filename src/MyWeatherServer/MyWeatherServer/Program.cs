@@ -1,9 +1,22 @@
+using MyWeatherServer.Extensions;
+
 var builder = WebApplication.CreateBuilder(args);
+var services = builder.Services;
 
-builder.Services.AddControllers();
+var configuration = new ConfigurationBuilder()
+                    .AddJsonFile("appsettings.json", false, true)
+                    .AddJsonFile($"appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")}.json",
+                        false, true)
+                    .Build();
 
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+
+services
+    .ConfigureControllers()
+    .AddEndpointsApiExplorer()
+    .AddSwaggerGen()
+    .ConfigureNpgsqlContext(configuration)
+    .ConfigureIdentity()
+    .ConfigureDbServices();
 
 var app = builder.Build();
 
