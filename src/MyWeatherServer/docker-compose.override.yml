@@ -1,0 +1,37 @@
+version: '3.4'
+
+services:
+  myweatherserver:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=https://+:443;http://+:80
+    ports:
+      - "80"
+      - "443"
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
+      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
+    networks:
+      - weather
+
+  postgres:
+    container_name: "postgres"
+    restart: always
+    ports:
+      - '5432:5432'
+    volumes: 
+      - restate-postgres:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB="weatherdb"
+    networks:
+      - weather
+
+networks:
+  weather:
+    driver: bridge
+
+volumes:
+  restate-postgres:
+    external: false
