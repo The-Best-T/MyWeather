@@ -1,8 +1,11 @@
-﻿using DataAccess.Npgsql;
+﻿using System.Text;
+using DataAccess.Npgsql;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 
-namespace MyWeatherServer.Extensions;
+namespace MyWeatherServer.Pipeline;
 
 public static class ServicesExtensions
 {
@@ -33,6 +36,34 @@ public static class ServicesExtensions
                 opts.Password.RequireUppercase = false;
             })
             .AddEntityFrameworkStores<WeatherContext>();
+
+        return services;
+    }
+
+    public static IServiceCollection ConfigureAuthentication(
+        this IServiceCollection services,
+        IConfiguration configuration)
+    {
+        var key = Environment.GetEnvironmentVariable("IDKEY");
+
+        services.AddAuthentication(opts =>
+        {
+            opts.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            opts.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            opts.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+        }).AddJwtBearer(opts =>
+        {
+            opts.TokenValidationParameters = new TokenValidationParameters
+            {
+                ValidIssuer = configuration["JwtSettings:Issuer"],
+                ValidAudience = configuration["JwtSettings:Audience"],
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key!)),
+                ValidateIssuer = true,
+                ValidateAudience = true,
+                ValidateLifetime = true,
+                ValidateIssuerSigningKey = true,
+            };
+        });
 
         return services;
     }

@@ -1,4 +1,6 @@
-using MyWeatherServer.Extensions;
+using MyWeatherServer.Pipeline;
+using System.Reflection;
+using MediatR;
 
 var builder = WebApplication.CreateBuilder(args);
 var services = builder.Services;
@@ -11,12 +13,16 @@ var configuration = new ConfigurationBuilder()
 
 
 services
+    .ConfigureAuthentication(configuration)
+    .AddAuthorization()
     .ConfigureControllers()
     .AddEndpointsApiExplorer()
     .AddSwaggerGen()
     .ConfigureNpgsqlContext(configuration)
     .ConfigureIdentity()
-    .ConfigureDbServices();
+    .ConfigureDbServices()
+    .AddMediatR(typeof(Program))
+    .AddAutoMapper(typeof(Program));
 
 var app = builder.Build();
 
@@ -25,6 +31,7 @@ app.UseSwaggerUI();
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

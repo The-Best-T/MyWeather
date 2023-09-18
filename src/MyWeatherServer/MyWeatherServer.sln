@@ -3,21 +3,21 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.4.33213.308
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyWeatherServer", "MyWeatherServer\MyWeatherServer.csproj", "{62B35BCC-CCCE-4365-BCF0-950D52B61D0A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyWeatherServer", "MyWeatherServer\MyWeatherServer.csproj", "{62B35BCC-CCCE-4365-BCF0-950D52B61D0A}"
 EndProject
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{A9AD913E-3C2F-43DC-A3B2-5BC5804BECBE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UseCases", "UseCases\UseCases.csproj", "{D2E711C7-15DB-4301-A171-1CBC20DE95D1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UseCases", "UseCases\UseCases.csproj", "{D2E711C7-15DB-4301-A171-1CBC20DE95D1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Controlles", "Controlles\Controlles.csproj", "{1D3F8E77-4C8B-4567-8179-2625A15742C4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Controllers", "Controlles\Controllers.csproj", "{1D3F8E77-4C8B-4567-8179-2625A15742C4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain", "Domain\Domain.csproj", "{98C31FE4-DB59-42AE-B627-A0E83836351B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Domain", "Domain\Domain.csproj", "{98C31FE4-DB59-42AE-B627-A0E83836351B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataAccess.Abstractions", "DataAccess.Abstractions\DataAccess.Abstractions.csproj", "{53D9E2A3-76B0-45A8-9BAC-821173A343C5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataAccess.Abstractions", "DataAccess.Abstractions\DataAccess.Abstractions.csproj", "{53D9E2A3-76B0-45A8-9BAC-821173A343C5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataAccess.Npgsql", "DataAccess.Npgsql\DataAccess.Npgsql.csproj", "{177A0707-D89D-4C06-A16A-DF1F36F14F12}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataAccess.Npgsql", "DataAccess.Npgsql\DataAccess.Npgsql.csproj", "{177A0707-D89D-4C06-A16A-DF1F36F14F12}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core", "Core\Core.csproj", "{2E2516FB-80E7-427D-AED0-1B7F7A118E47}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core", "Core\Core.csproj", "{2E2516FB-80E7-427D-AED0-1B7F7A118E47}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
