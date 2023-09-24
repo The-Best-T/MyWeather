@@ -27,7 +27,7 @@ internal class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, Use
 
         if (user is not null)
         {
-            throw new EntityConflictException($"user with email {request.Email} already exist");
+            throw new EntityConflictException($"User with email {request.Email} already exist");
         }
 
         var newUser = _mapper.Map<IdentityUser>(request);
