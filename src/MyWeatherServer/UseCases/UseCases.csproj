@@ -9,7 +9,6 @@
   <ItemGroup>
     <Folder Include="Commands\CreateUser\" />
     <Folder Include="Commands\CreateToken\" />
-    <Folder Include="Mappers\" />
     <Folder Include="Dto\" />
     <Folder Include="Services\" />
     <Folder Include="Queries\" />

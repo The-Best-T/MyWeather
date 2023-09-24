@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using UseCases.Abstractions;
+using UseCases.Services;
 
 namespace MyWeatherServer.Pipeline;
 
@@ -29,6 +31,7 @@ internal static class ServicesExtensions
             .ConfigureNpgsqlContext(configuration)
             .ConfigureIdentity()
             .ConfigureDbServices()
+            .ConfigureLogicServices()
             .AddMediatR(typeof(Program))
             .ConfigureValidation()
             .AddAutoMapper(typeof(Program));
@@ -119,6 +122,14 @@ internal static class ServicesExtensions
     private static IServiceCollection ConfigureDbServices(
         this IServiceCollection services)
     {
+        return services;
+    }
+
+    private static IServiceCollection ConfigureLogicServices(
+        this IServiceCollection services)
+    {
+        services.AddScoped<IAuthenticationService, AuthenticationService>();
+
         return services;
     }
 
