@@ -10,7 +10,7 @@ namespace Controllers.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-internal class AccountController : ControllerBase
+public class AccountController : ControllerBase
 {
     private readonly ISender _sender;
     private readonly IMapper _mapper;

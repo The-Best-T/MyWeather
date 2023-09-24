@@ -2,14 +2,15 @@ using MyWeatherServer.Pipeline;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var app = builder.AddApiServices().Build();
+var app = await builder
+                .AddApiServices()
+                .Build()
+                .MigrateDatabase();
 
 app.UseSwagger();
 app.UseSwaggerUI();
 
 app.UseMiddleware<ExceptionHandler>();
-
-app.UseHttpsRedirection();
 
 app.UseAuthentication();
 app.UseAuthorization();

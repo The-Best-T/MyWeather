@@ -1,4 +1,6 @@
-﻿using System.Text;
+﻿using System.Reflection;
+using System.Text;
+using Controllers.Controllers;
 using Core;
 using DataAccess.Npgsql;
 using MediatR;
@@ -6,6 +8,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using UseCases.Abstractions;
 using UseCases.Services;
 
@@ -22,19 +25,28 @@ internal static class ServicesExtensions
                                 false, true)
                             .Build();
 
+        var assemblies = new[]
+        {
+            Assembly.GetExecutingAssembly(),
+            Assembly.Load("Controllers"), 
+            Assembly.Load("UseCases"),
+            Assembly.Load("DataAccess.Npgsql"),
+        };
+
         builder.Services
-            .ConfigureAuthentication(configuration)
-            .AddAuthorization()
-            .ConfigureControllers()
-            .AddEndpointsApiExplorer()
-            .AddSwaggerGen()
-            .ConfigureNpgsqlContext(configuration)
-            .ConfigureIdentity()
-            .ConfigureDbServices()
-            .ConfigureLogicServices()
-            .AddMediatR(typeof(Program))
-            .ConfigureValidation()
-            .AddAutoMapper(typeof(Program));
+               .ConfigureAuthentication(configuration)
+               .AddAuthorization()
+               .ConfigureControllers()
+               .AddEndpointsApiExplorer()
+               .AddSwaggerGen()
+               .ConfigureNpgsqlContext(configuration)
+               .ConfigureIdentity()
+               .ConfigureDbServices()
+               .ConfigureLogicServices()
+               .AddMediatR(assemblies)
+               .ConfigureValidation()
+               .AddAutoMapper(assemblies)
+               .ConfigureSwagger();
 
         return builder;
     }
@@ -129,6 +141,54 @@ internal static class ServicesExtensions
         this IServiceCollection services)
     {
         services.AddScoped<IAuthenticationService, AuthenticationService>();
+
+        return services;
+    }
+
+    private static IServiceCollection ConfigureSwagger(
+        this IServiceCollection services)
+    {
+        services.AddSwaggerGen(cfg =>
+        {
+            cfg.CustomSchemaIds(x => x.FullName);
+
+            cfg.SwaggerDoc("v1", new OpenApiInfo
+            {
+                Title = "MyWeather API",
+                Description = "An API to look ur weather",
+                Contact = new OpenApiContact
+                {
+                    Name = "Evgeniy Hamichenok",
+                    Email = "zhamichenok@gmail.com",
+                    Url = new Uri("https://github.com/The-Best-T"),
+                }
+            });
+
+            cfg.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+            {
+                In = ParameterLocation.Header,
+                Description = "Place to add JWT with Bearer",
+                Name = "Authorization",
+                Type = SecuritySchemeType.ApiKey,
+                Scheme = "Bearer",
+            });
+
+            cfg.AddSecurityRequirement(new OpenApiSecurityRequirement
+            {
+                {
+                    new OpenApiSecurityScheme
+                    {
+                        Reference = new OpenApiReference
+                        {
+                            Type = ReferenceType.SecurityScheme,
+                            Id = "Bearer",
+                        },
+                        Name = "Bearer",
+                    },
+                    new List<string>()
+                }
+            });
+        });
 
         return services;
     }

@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Net.Mime;
+using System.Text.Json;
 using Core;
 using Exceptions;
 
@@ -14,43 +15,31 @@ internal class ExceptionHandler
         _next = next;
     }
 
-    public async Task InvokeAsync(
-        HttpContext httpContext)
+    public async Task InvokeAsync(HttpContext context)
     {
         try
         {
-            await _next(httpContext);
+            await _next(context);
         }
         catch (Exception ex)
         {
-            await HandleExceptionAsync(httpContext, ex);
+            var exceptionResponse = new ErrorDetails
+            {
+                Message = ex.Message,
+            };
+
+            var statusCode = ex switch
+            {
+                EntityConflictException => StatusCodes.Status409Conflict,
+                EntityNotFoundException => StatusCodes.Status404NotFound,
+                _ => StatusCodes.Status500InternalServerError,
+            };
+
+            context.Response.StatusCode = statusCode;
+            context.Response.ContentType = MediaTypeNames.Application.Json;
+            var json = JsonSerializer.Serialize(exceptionResponse);
+
+            await context.Response.WriteAsync(json, context.RequestAborted);
         }
-    }
-
-    private async Task HandleExceptionAsync(
-        HttpContext context,
-        Exception exception)
-    {
-        context.Response.ContentType = "application/json";
-        context.Response.StatusCode = GetStatusCode(exception);
-
-        await context.Response.WriteAsync(new ErrorDetails
-        {
-            StatusCode = context.Response.StatusCode,
-            Message = exception.Message,
-        }.ToString() ?? string.Empty);
-    }
-
-    private static int GetStatusCode(
-        Exception exception)
-    {
-        return exception switch
-        {
-            ArgumentNullException => StatusCodes.Status400BadRequest,
-            EntityNotFoundException => StatusCodes.Status404NotFound,
-            ValidationException => StatusCodes.Status422UnprocessableEntity,
-            OperationCanceledException => 499,
-            _ => StatusCodes.Status500InternalServerError,
-        };
     }
 }

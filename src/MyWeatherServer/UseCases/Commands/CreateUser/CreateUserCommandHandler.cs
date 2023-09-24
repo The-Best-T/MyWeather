@@ -23,7 +23,7 @@ internal class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, Use
         CreateUserCommand request,
         CancellationToken cancellationToken)
     {
-        var user = _userManager.FindByEmailAsync(request.Email);
+        var user = await _userManager.FindByEmailAsync(request.Email);
 
         if (user is not null)
         {
@@ -39,6 +39,6 @@ internal class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, Use
             throw new AppException("Something went wrong");
         }
 
-        return _mapper.Map<UserDto>(newUser);
+        return _mapper.Map<UserDto>(request);
     }
 }
