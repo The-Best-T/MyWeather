@@ -1,6 +1,4 @@
 using MyWeatherServer.Pipeline;
-using System.Reflection;
-using MediatR;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,6 +6,8 @@ var app = builder.AddApiServices().Build();
 
 app.UseSwagger();
 app.UseSwaggerUI();
+
+app.UseMiddleware<ExceptionHandler>();
 
 app.UseHttpsRedirection();
 
