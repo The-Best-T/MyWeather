@@ -17,9 +17,15 @@
 
   <ItemGroup>
     <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="11.1.0" />
+    <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="6.15.1" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.15.1" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Exceptions\Exceptions.csproj" />
+    <ProjectReference Include="..\..\UseCases.Abstractions\UseCases.Abstractions.csproj" />
+    <ProjectReference Include="..\..\Utils\Utils.csproj" />
+    <ProjectReference Include="..\Core\Core.csproj" />
     <ProjectReference Include="..\DataAccess.Npgsql\DataAccess.Npgsql.csproj" />
   </ItemGroup>
 

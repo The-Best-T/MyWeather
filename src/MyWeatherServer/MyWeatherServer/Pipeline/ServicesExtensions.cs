@@ -1,5 +1,7 @@
 ﻿using System.Text;
+using Core;
 using DataAccess.Npgsql;
+using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -7,9 +9,34 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace MyWeatherServer.Pipeline;
 
-public static class ServicesExtensions
+internal static class ServicesExtensions
 {
-    public static IServiceCollection ConfigureControllers(
+    public static WebApplicationBuilder AddApiServices(
+        this WebApplicationBuilder builder)
+    {
+        var configuration = new ConfigurationBuilder()
+                            .AddJsonFile("appsettings.json", false, true)
+                            .AddJsonFile($"appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")}.json",
+                                false, true)
+                            .Build();
+
+        builder.Services
+            .ConfigureAuthentication(configuration)
+            .AddAuthorization()
+            .ConfigureControllers()
+            .AddEndpointsApiExplorer()
+            .AddSwaggerGen()
+            .ConfigureNpgsqlContext(configuration)
+            .ConfigureIdentity()
+            .ConfigureDbServices()
+            .AddMediatR(typeof(Program))
+            .ConfigureValidation()
+            .AddAutoMapper(typeof(Program));
+
+        return builder;
+    }
+
+    private static IServiceCollection ConfigureControllers(
         this IServiceCollection services)
     {
         services
@@ -23,7 +50,7 @@ public static class ServicesExtensions
         return services;
     }
 
-    public static IServiceCollection ConfigureIdentity(
+    private static IServiceCollection ConfigureIdentity(
         this IServiceCollection services)
     {
         services
@@ -40,11 +67,16 @@ public static class ServicesExtensions
         return services;
     }
 
-    public static IServiceCollection ConfigureAuthentication(
-        this IServiceCollection services,
+    private static IServiceCollection ConfigureAuthentication(
+        this IServiceCollection services, 
         IConfiguration configuration)
     {
-        var key = Environment.GetEnvironmentVariable("IDKEY");
+        var jwtSettings = configuration.GetSection("JwtSettings").Get<JwtSettings>();
+        if (jwtSettings is null)
+            throw new ArgumentNullException(nameof(configuration), $"{nameof(jwtSettings)} is null");
+        services.AddSingleton(jwtSettings);
+        
+        var key = Environment.GetEnvironmentVariable(GlobalConstants.SecretKeyName);
 
         services.AddAuthentication(opts =>
         {
@@ -55,8 +87,8 @@ public static class ServicesExtensions
         {
             opts.TokenValidationParameters = new TokenValidationParameters
             {
-                ValidIssuer = configuration["JwtSettings:Issuer"],
-                ValidAudience = configuration["JwtSettings:Audience"],
+                ValidIssuer = jwtSettings.Issuer,
+                ValidAudience = jwtSettings.Audience,
                 IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key!)),
                 ValidateIssuer = true,
                 ValidateAudience = true,
@@ -68,7 +100,7 @@ public static class ServicesExtensions
         return services;
     }
 
-    public static IServiceCollection ConfigureNpgsqlContext(
+    private static IServiceCollection ConfigureNpgsqlContext(
         this IServiceCollection services,
         IConfiguration configuration)
     {
@@ -84,13 +116,13 @@ public static class ServicesExtensions
         return services;
     }
 
-    public static IServiceCollection ConfigureDbServices(
+    private static IServiceCollection ConfigureDbServices(
         this IServiceCollection services)
     {
         return services;
     }
 
-    public static IServiceCollection ConfigureValidation(
+    private static IServiceCollection ConfigureValidation(
         this IServiceCollection services)
     {
         return services;
