@@ -1,7 +1,9 @@
 ﻿using System.Reflection;
 using System.Text;
 using Core;
+using DataAccess.Abstractions.Repositories;
 using DataAccess.Npgsql;
+using DataAccess.Npgsql.Repositories;
 using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -133,6 +135,8 @@ internal static class ServicesExtensions
     private static IServiceCollection ConfigureDbServices(
         this IServiceCollection services)
     {
+        services.AddScoped<ILocationRepository, LocationRepository>();
+
         return services;
     }
 
