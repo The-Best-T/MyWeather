@@ -1,8 +1,8 @@
 ﻿using System.Reflection;
 using System.Text;
-using Controllers.Controllers;
 using Core;
 using DataAccess.Npgsql;
+using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
@@ -195,6 +195,9 @@ internal static class ServicesExtensions
     private static IServiceCollection ConfigureValidation(
         this IServiceCollection services)
     {
+        services.AddValidatorsFromAssembly(Assembly.Load("UseCases"));
+        services.AddScoped(typeof(IPipelineBehavior<,>), typeof(ValidationPipeline<,>));
+
         return services;
     }
 }
