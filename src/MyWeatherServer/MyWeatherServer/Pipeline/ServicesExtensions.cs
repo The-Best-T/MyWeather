@@ -57,7 +57,6 @@ internal static class ServicesExtensions
         services
             .AddControllers(config =>
             {
-                config.ReturnHttpNotAcceptable = true;
                 config.RespectBrowserAcceptHeader = true;
             })
             .AddXmlDataContractSerializerFormatters();
