@@ -8,5 +8,15 @@ public interface ILocationRepository
         string userId,
         CancellationToken cancellationToken = default);
 
-    Task SaveChangesAsync(CancellationToken cancellationToken = default);
+    Task SaveChangesAsync(
+        CancellationToken cancellationToken = default);
+
+    Task<int> GetCountByUserIdAsync(
+        string userId,
+        CancellationToken cancellationToken = default);
+
+    Task<Location> CreateLocationAsync(
+        string userId,
+        Location newLocation,
+        CancellationToken cancellationToken = default);
 }

@@ -9,6 +9,7 @@
   <ItemGroup>
     <Folder Include="Commands\CreateUser\" />
     <Folder Include="Commands\CreateToken\" />
+    <Folder Include="Commands\CreateLocation\" />
     <Folder Include="Queries\GetLocations\" />
     <Folder Include="Services\" />
   </ItemGroup>

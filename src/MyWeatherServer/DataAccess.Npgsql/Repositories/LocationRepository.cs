@@ -34,4 +34,26 @@ public class LocationRepository : ILocationRepository
     {
         await _weatherContext.SaveChangesAsync(cancellationToken);
     }
+
+    public async Task<int> GetCountByUserIdAsync(
+        string userId,
+        CancellationToken cancellationToken = default)
+    {
+        return await _weatherContext
+                     .Locations
+                     .Where(x => x.UserId == userId)
+                     .CountAsync(cancellationToken);
+    }
+
+    public async Task<Location> CreateLocationAsync(
+        string userId,
+        Location newLocation,
+        CancellationToken cancellationToken = default)
+    {
+        var entity = _mapper.Map<DatabaseEntities.Location>(newLocation);
+        entity.UserId = userId;
+        await _weatherContext.Locations.AddAsync(entity, cancellationToken);
+
+        return _mapper.Map<Location>(entity);
+    }
 }
