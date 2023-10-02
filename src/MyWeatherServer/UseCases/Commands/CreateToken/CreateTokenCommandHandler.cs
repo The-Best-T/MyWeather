@@ -1,6 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using AutoMapper;
-using Exceptions;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using UseCases.Abstractions;

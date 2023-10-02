@@ -2,6 +2,7 @@
 using AutoMapper.QueryableExtensions;
 using DataAccess.Abstractions.Repositories;
 using Domain;
+using Exceptions;
 using Microsoft.EntityFrameworkCore;
 
 namespace DataAccess.Npgsql.Repositories;
@@ -31,11 +32,6 @@ public class LocationRepository : ILocationRepository
                      .ToListAsync(cancellationToken);
     }
 
-    public async Task SaveChangesAsync(CancellationToken cancellationToken = default)
-    {
-        await _weatherContext.SaveChangesAsync(cancellationToken);
-    }
-
     public async Task<int> GetCountByUserIdAsync(
         string userId,
         CancellationToken cancellationToken = default)
@@ -44,6 +40,17 @@ public class LocationRepository : ILocationRepository
                      .Locations
                      .Where(x => x.UserId == userId)
                      .CountAsync(cancellationToken);
+    }
+
+    public async Task<Location?> GetLocationByIdAndUserIdAsync(
+        Guid id,
+        string userId,
+        CancellationToken cancellation = default)
+    {
+        return await _weatherContext.Locations
+                                    .Where(x => x.UserId == userId && x.Id == id)
+                                    .ProjectTo<Location>(_mapper.ConfigurationProvider)
+                                    .FirstOrDefaultAsync(cancellation);
     }
 
     public async Task<Location> CreateLocationAsync(
@@ -56,5 +63,36 @@ public class LocationRepository : ILocationRepository
         await _weatherContext.Locations.AddAsync(entity, cancellationToken);
 
         return _mapper.Map<Location>(entity);
+    }
+
+    public async Task<Location> UpdateLocationAsync(
+        Location newLocation,
+        CancellationToken cancellationToken = default)
+    {
+        var entity = await _weatherContext.Locations
+                                          .FirstOrDefaultAsync(x => x.Id == newLocation.Id, cancellationToken) ??
+                     throw new EntityNotFoundException(nameof(Location));
+
+        _mapper.Map(newLocation,entity);
+
+        return _mapper.Map<Location>(entity);
+    }
+
+    public async Task<Location> DeleteLocationAsync(
+        Guid id,
+        CancellationToken cancellationToken = default)
+    {
+        var entity = await _weatherContext.Locations
+                                          .FirstOrDefaultAsync(x => x.Id == id, cancellationToken) ??
+                     throw new EntityNotFoundException(nameof(Location));
+
+        _weatherContext.Locations.Remove(entity);
+
+        return _mapper.Map<Location>(entity);
+    }
+
+    public async Task SaveChangesAsync(CancellationToken cancellationToken = default)
+    {
+        await _weatherContext.SaveChangesAsync(cancellationToken);
     }
 }

@@ -33,6 +33,7 @@ public class CreateLocationCommandHandler : IRequestHandler<CreateLocationComman
         var locationToCreate = _mapper.Map<Location>(request);
 
         var createdLocation = await _locationRepository.CreateLocationAsync(request.UserId, locationToCreate, cancellationToken);
+        await _locationRepository.SaveChangesAsync(cancellationToken);
 
         return _mapper.Map<LocationDto>(createdLocation);
     }

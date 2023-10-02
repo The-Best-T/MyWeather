@@ -1,4 +1,5 @@
-﻿using System.Net.Mime;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Net.Mime;
 using System.Text.Json;
 using Core;
 using Exceptions;
@@ -30,8 +31,9 @@ internal class ExceptionHandler
 
             var statusCode = ex switch
             {
-                EntityConflictException => StatusCodes.Status409Conflict,
+                ValidationException => StatusCodes.Status400BadRequest,
                 EntityNotFoundException => StatusCodes.Status404NotFound,
+                EntityConflictException => StatusCodes.Status409Conflict,
                 _ => StatusCodes.Status500InternalServerError,
             };
 

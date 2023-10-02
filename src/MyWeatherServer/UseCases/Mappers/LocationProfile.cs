@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
-using DataAccess.Npgsql.DatabaseEntities;
+using Domain;
 using UseCases.Commands.CreateLocation;
+using UseCases.Commands.UpdateLocation;
 using UseCases.Dto;
 
 namespace UseCases.Mappers;
@@ -11,5 +12,6 @@ public class LocationProfile : Profile
     {
         CreateMap<Location, LocationDto>();
         CreateMap<CreateLocationCommand, Location>();
+        CreateMap<UpdateLocationCommand, Location>();
     }
 }
