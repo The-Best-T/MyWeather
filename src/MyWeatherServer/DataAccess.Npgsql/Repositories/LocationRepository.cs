@@ -26,6 +26,7 @@ public class LocationRepository : ILocationRepository
         return await _weatherContext
                      .Locations
                      .Where(x => x.UserId == userId)
+                     .OrderBy(x => x.Name)
                      .ProjectTo<Location>(_mapper.ConfigurationProvider)
                      .ToListAsync(cancellationToken);
     }
