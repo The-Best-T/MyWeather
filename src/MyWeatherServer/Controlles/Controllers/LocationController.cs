@@ -12,7 +12,7 @@ using Utils.Extensions;
 
 namespace Controllers.Controllers;
 
-[Route("api/[controller]")]
+[Route("api/locations")]
 [ApiController]
 [Authorize]
 public class LocationsController : ControllerBase

@@ -12,5 +12,7 @@ public class UserProfile : Profile
         CreateMap<CreateUserCommand, UserDto>();
         CreateMap<CreateUserCommand, IdentityUser>()
             .ForMember(x => x.UserName, opts => opts.MapFrom(y => y.Email));
+
+        CreateMap<IdentityUser, UserDto>();
     }
 }

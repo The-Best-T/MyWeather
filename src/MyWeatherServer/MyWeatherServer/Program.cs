@@ -7,6 +7,8 @@ var app = await builder
                 .Build()
                 .MigrateDatabase();
 
+app.UseCors("AllowAnyMethodsPolicy");
+
 app.UseSwagger();
 app.UseSwaggerUI();
 

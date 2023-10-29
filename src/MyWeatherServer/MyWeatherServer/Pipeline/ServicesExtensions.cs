@@ -39,6 +39,7 @@ internal static class ServicesExtensions
                .ConfigureAuthentication(configuration)
                .AddAuthorization()
                .ConfigureControllers()
+               .ConfigureCors()
                .AddEndpointsApiExplorer()
                .AddSwaggerGen()
                .ConfigureNpgsqlContext(configuration)
@@ -51,6 +52,21 @@ internal static class ServicesExtensions
                .ConfigureSwagger();
 
         return builder;
+    }
+
+    private static IServiceCollection ConfigureCors(
+        this IServiceCollection services)
+    {
+        services.AddCors(opts =>
+        {
+            opts.AddPolicy("AllowAnyMethodsPolicy",
+                builder => builder
+                           .AllowAnyOrigin()
+                           .AllowAnyMethod()
+                           .AllowAnyHeader());
+        });
+
+        return services;
     }
 
     private static IServiceCollection ConfigureControllers(

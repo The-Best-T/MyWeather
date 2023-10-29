@@ -2,13 +2,16 @@
 using Controllers.Contracts.Input;
 using Controllers.Contracts.Output;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using UseCases.Commands.CreateToken;
 using UseCases.Commands.CreateUser;
+using UseCases.Queries.GetCurrentUser;
+using Utils.Extensions;
 
 namespace Controllers.Controllers;
 
-[Route("api/[controller]")]
+[Route("api/account")]
 [ApiController]
 public class AccountController : ControllerBase
 {
@@ -21,6 +24,17 @@ public class AccountController : ControllerBase
     {
         _sender = sender;
         _mapper = mapper;
+    }
+
+    [HttpGet("current")]
+    [Authorize]
+    public async Task<ActionResult<UserOutput>> GetCurrentUser()
+    {
+        var currentUser = await _sender.Send(new GetCurrentUserQuery(
+                                  HttpContext.User.GetUserId()), 
+                              HttpContext.RequestAborted);
+
+        return Ok(_mapper.Map<UserOutput>(currentUser));
     }
 
     [HttpPost("register")]

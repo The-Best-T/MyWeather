@@ -22,7 +22,7 @@ public class GetLocationsQueryHandler : IRequestHandler<GetLocationsQuery, IEnum
         GetLocationsQuery request,
         CancellationToken cancellationToken)
     {
-        var locations = await _locationRepository.GetLocationsByUserIdAsync(request.userId, cancellationToken);
+        var locations = await _locationRepository.GetLocationsByUserIdAsync(request.UserId, cancellationToken);
 
         return _mapper.Map<IEnumerable<LocationDto>>(locations);
     }
