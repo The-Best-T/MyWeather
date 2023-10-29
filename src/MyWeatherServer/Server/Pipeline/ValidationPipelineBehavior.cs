@@ -2,7 +2,7 @@
 using MediatR;
 using ValidationException = System.ComponentModel.DataAnnotations.ValidationException;
 
-namespace MyWeatherServer.Pipeline;
+namespace Server.Pipeline;
 
 public class ValidationPipeline<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
     where TRequest : IRequest<TResponse>

@@ -1,4 +1,4 @@
-using MyWeatherServer.Pipeline;
+using Server.Pipeline;
 
 var builder = WebApplication.CreateBuilder(args);
 

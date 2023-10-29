@@ -4,7 +4,7 @@ using System.Text.Json;
 using Core;
 using Exceptions;
 
-namespace MyWeatherServer.Pipeline;
+namespace Server.Pipeline;
 
 internal class ExceptionHandler
 {

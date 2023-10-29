@@ -14,7 +14,7 @@ using Microsoft.OpenApi.Models;
 using UseCases.Abstractions;
 using UseCases.Services;
 
-namespace MyWeatherServer.Pipeline;
+namespace Server.Pipeline;
 
 internal static class ServicesExtensions
 {

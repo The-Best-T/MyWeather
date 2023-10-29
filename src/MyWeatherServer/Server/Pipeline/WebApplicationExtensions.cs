@@ -1,7 +1,7 @@
 ﻿using DataAccess.Npgsql;
 using Microsoft.EntityFrameworkCore;
 
-namespace MyWeatherServer.Pipeline;
+namespace Server.Pipeline;
 
 public static class WebApplicationExtensions
 {

@@ -7,21 +7,14 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="DatabaseEntities\" />
-    <Folder Include="Configurations\" />
-    <Folder Include="Mappers\" />
-    <Folder Include="Repositories\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
+    <PackageReference Include="AutoMapper" Version="12.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="7.0.13" />
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="7.0.11" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Exceptions\Exceptions.csproj" />
     <ProjectReference Include="..\DataAccess.Abstractions\DataAccess.Abstractions.csproj" />
+    <ProjectReference Include="..\Exceptions\Exceptions.csproj" />
   </ItemGroup>
 
 </Project>

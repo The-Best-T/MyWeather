@@ -1,6 +1,8 @@
 ﻿using System.Reflection;
 using System.Runtime.Loader;
 
+namespace Utils.Extensions;
+
 public static class AssemblyExtensions
 {
     public static IEnumerable<Assembly> GetReferencedAssemblies(
