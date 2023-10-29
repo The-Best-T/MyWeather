@@ -92,6 +92,7 @@ internal static class ServicesExtensions
                 opts.Password.RequiredLength = 6;
                 opts.Password.RequireDigit = false;
                 opts.Password.RequireNonAlphanumeric = false;
+                opts.Password.RequireLowercase = false;
                 opts.Password.RequireUppercase = false;
             })
             .AddEntityFrameworkStores<WeatherContext>();

@@ -14,6 +14,7 @@ public class CreateTokenCommandValidator : AbstractValidator<CreateTokenCommand>
         RuleFor(x => x.Password)
             .NotNull()
             .NotEmpty()
-            .MinimumLength(6);
+            .MinimumLength(6)
+            .Matches("^(?=.*[a-zA-Z])[a-zA-Z\\d]+$");
     }
 }

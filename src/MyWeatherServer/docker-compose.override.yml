@@ -3,7 +3,7 @@ version: '3.4'
 services:
   server:
     environment:
-      - IDKEY=wzaredcggvhnkbgjvfhdcxg123 
+      - IDKEY=wzaredcggvhnkbgjvfhdcx1221dwdwdwwdww123 
       - ASPNETCORE_ENVIRONMENT=Docker
       - ASPNETCORE_URLS=http://+:80
     ports:
